@@ -1,8 +1,9 @@
-package BigProject;
+package BigProject.CreatePageClasses;
 
 import BigProject.Classes.Airplanes;
 import BigProject.Classes.Cities;
 import BigProject.Classes.Flights;
+import BigProject.GuiAdmin;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +12,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class CreateFlight extends JPanel {
-    private Gui parent;
+    private GuiAdmin parent;
     private JLabel jLabel;
 
     private final JLabel aiL;
@@ -21,9 +22,9 @@ public class CreateFlight extends JPanel {
     private final JLabel eppL;
     private final JLabel bppL;
 
-    private JComboBox aiT; //aircraft_id
-    private JComboBox dciT;
-    private JComboBox aciT;
+    private JComboBox<String> aiT; //aircraft_id
+    private JComboBox<String> dciT;
+    private JComboBox<String> aciT;
     private JTextField dtT;
     private JTextField eppT;
     private JTextField bppT;
@@ -33,7 +34,7 @@ public class CreateFlight extends JPanel {
     private JButton addB;
     private JButton backB;
 
-    public CreateFlight(Gui parent) {
+    public CreateFlight(GuiAdmin parent) {
         this.parent = parent;
 
         setSize(700, 600);
@@ -70,29 +71,27 @@ public class CreateFlight extends JPanel {
         bppL.setLocation(125, 400);
         add(bppL);
 
+        cities = parent.getCities();
         airplanes = parent.getAirplanes();
-        String[] airplanesArray = new String[airplanes.size()];
-        int j = 0;
-        for(Airplanes a:airplanes) {
-            airplanesArray[j] = a.getName() + " " + a.getModel();
-            j++;
-        }
-        aiT = new JComboBox(airplanesArray);
+
+//        String[] airplanesArray = new String[airplanes.size()];
+//        int j = 0;
+//        for(Airplanes a:airplanes) {
+//            airplanesArray[j] = a.getName() + " " + a.getModel();
+//            j++;
+//        }
+
+
+        aiT = new JComboBox();
         aiT.setSize(300,30);
         aiT.setLocation(250,150);
         add(aiT);
-        cities = parent.getCities();
-        String[] citiesArray = new String[cities.size()];
-        int i = 0;
-        for (Cities c:cities) {
-            citiesArray[i] = c.getName();
-            i++;
-        }
-        dciT = new JComboBox(citiesArray);
+
+        dciT = new JComboBox();
         dciT.setSize(300,30);
         dciT.setLocation(250, 200);
         add(dciT);
-        aciT = new JComboBox(citiesArray);
+        aciT = new JComboBox();
         aciT.setSize(300,30);
         aciT.setLocation(250,250);
         add(aciT);
@@ -112,42 +111,49 @@ public class CreateFlight extends JPanel {
         addB = new JButton("Add");
         addB.setSize(150,30);
         addB.setLocation(150, 450);
-        addB.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int ai = aiT.getSelectedIndex()+1;
-                int dci = dciT.getSelectedIndex()+1;
-                int aci = aciT.getSelectedIndex()+1;
-                String dt = dtT.getText();
-                String epp = eppT.getText();
-                String bpp = bppT.getText();
-                try{
-                    int eppI = Integer.parseInt(epp);
-                    int bppI = Integer.parseInt(bpp);
-                    Flights flight = new Flights(-1, ai, dci, aci, dt, eppI, bppI);
-                    parent.addFlight(flight);
-                }catch (Exception ex){ex.printStackTrace();}
-                aiT.setSelectedIndex(0);
-                dciT.setSelectedIndex(0);
-                aciT.setSelectedIndex(0);
-                dtT.setText(null);
-                eppT.setText(null);
-                bppT.setText(null);
-            }
+        addB.addActionListener(e -> {
+            int ai = aiT.getSelectedIndex()+1;
+            int dci = dciT.getSelectedIndex()+1;
+            int aci = aciT.getSelectedIndex()+1;
+            String dt = dtT.getText();
+            String epp = eppT.getText();
+            String bpp = bppT.getText();
+            try{
+                int eppI = Integer.parseInt(epp);
+                int bppI = Integer.parseInt(bpp);
+                Flights flight = new Flights(-1, ai, dci, aci, dt, eppI, bppI);
+                parent.addFlight(flight);
+            }catch (Exception ex){ex.printStackTrace();}
+            aiT.setSelectedIndex(0);
+            dciT.setSelectedIndex(0);
+            aciT.setSelectedIndex(0);
+            dtT.setText(null);
+            eppT.setText(null);
+            bppT.setText(null);
         });
         add(addB);
 
         backB = new JButton("Cancel");
         backB.setSize(150,30);
         backB.setLocation(350,450);
-        backB.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                parent.getCreateFlight().setVisible(false);
-                parent.getCreateMenu().setVisible(true);
-            }
+        backB.addActionListener(e -> {
+            parent.getCreateFlight().setVisible(false);
+            parent.getCreateMenu().setVisible(true);
         });
         add(backB);
     }
-
+    public void updateBoxes(ArrayList<Cities> cities, ArrayList<Airplanes> airplanes){
+        aciT.removeAllItems();
+        aiT.removeAllItems();
+        dciT.removeAllItems();
+        for (Cities city : cities) {
+            aciT.addItem(city.getName() + " " + city.getShort_name());
+        }
+        for(int i = 0; i<cities.size(); i++){
+            dciT.addItem(cities.get(i).getName() + " " + cities.get(i).getShort_name());
+        }
+        for(int i = 0; i<airplanes.size(); i++){
+            aiT.addItem(airplanes.get(i).getName() + " " + airplanes.get(i).getModel());
+        }
+    }
 }

@@ -1,6 +1,7 @@
-package BigProject;
+package BigProject.CreatePageClasses;
 
 import BigProject.Classes.Airplanes;
+import BigProject.GuiAdmin;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,7 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class CreateAirplane extends JPanel {
-    private final Gui parent;
+    private final GuiAdmin parent;
     private JLabel jLabel;
     private JLabel nameL;
     private JLabel modelL;
@@ -21,7 +22,7 @@ public class CreateAirplane extends JPanel {
     private JButton addB;
     private JButton backB;
 
-    public CreateAirplane(Gui parent){
+    public CreateAirplane(GuiAdmin parent){
         this.parent = parent;
 
         setSize(700, 600);
@@ -70,36 +71,30 @@ public class CreateAirplane extends JPanel {
         addB = new JButton("Add");
         addB.setSize(100, 30);
         addB.setLocation(200, 350);
-        addB.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String name = nameT.getText();
-                String model = modelT.getText();
-                String bcc = bccT.getText();
-                String ecc = eccT.getText();
-                try{
-                    int bccI = Integer.parseInt(bcc);
-                    int eccI = Integer.parseInt(ecc);
-                    Airplanes airplane = new Airplanes(0, name, model, bccI, eccI);
-                    parent.addAirplane(airplane);
-                }catch (Exception exception) { exception.printStackTrace(); }
-                nameT.setText(null);
-                modelT.setText(null);
-                bccT.setText(null);
-                eccT.setText(null);
-            }
+        addB.addActionListener(e -> {
+            String name = nameT.getText();
+            String model = modelT.getText();
+            String bcc = bccT.getText();
+            String ecc = eccT.getText();
+            try{
+                int bccI = Integer.parseInt(bcc);
+                int eccI = Integer.parseInt(ecc);
+                Airplanes airplane = new Airplanes(0, name, model, bccI, eccI);
+                parent.addAirplane(airplane);
+            }catch (Exception exception) { exception.printStackTrace(); }
+            nameT.setText(null);
+            modelT.setText(null);
+            bccT.setText(null);
+            eccT.setText(null);
         });
         add(addB);
 
         backB = new JButton("Cancel");
         backB.setSize(100, 30);
         backB.setLocation(350, 350);
-        backB.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                parent.getCreateAirplane().setVisible(false);
-                parent.getCreateMenu().setVisible(true);
-            }
+        backB.addActionListener(e -> {
+            parent.getCreateAirplane().setVisible(false);
+            parent.getCreateMenu().setVisible(true);
         });
         add(backB);
     }

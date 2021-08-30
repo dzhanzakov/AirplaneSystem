@@ -1,19 +1,19 @@
-package BigProject;
+package BigProject.ChangePageClasses;
+
+import BigProject.GuiAdmin;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class ChangeMenu extends JPanel {
-    private final Gui parent;
+    private final GuiAdmin parent;
     private JLabel jLabel;
     private final JButton changeAirplane;
     private final JButton changeCity;
     private final JButton changeFlight;
     private final JButton cancel;
 
-    public ChangeMenu(Gui parent){
+    public ChangeMenu(GuiAdmin parent){
         this.parent = parent;
         setSize(700, 600);
         setLayout(null);
@@ -27,47 +27,39 @@ public class ChangeMenu extends JPanel {
         changeAirplane = new JButton("Change Airplane");
         changeAirplane.setSize(350, 30);
         changeAirplane.setLocation(170, 150);
-        changeAirplane.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                parent.getChangeAirplane().generateTable(parent.getAirplanes());
-                parent.getChangeAirplane().setVisible(true);
-                parent.getChangeMenu().setVisible(false);
-            }
+        changeAirplane.addActionListener(e -> {
+            parent.getChangeAirplane().generateTable(parent.getAirplanes());
+            parent.getChangeAirplane().setVisible(true);
+            parent.getChangeMenu().setVisible(false);
         });
         add(changeAirplane);
 
         changeCity = new JButton("Change City");
         changeCity.setSize(350, 30);
         changeCity.setLocation(170, 200);
-        changeCity.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
+        changeCity.addActionListener(e -> {
+            parent.getChangeMenu().setVisible(false);
+            parent.getChangeCity().generateTable(parent.getCities());
+            parent.getChangeCity().setVisible(true);
         });
         add(changeCity);
 
         changeFlight = new JButton("Change Flight");
         changeFlight.setSize(350,30);
         changeFlight.setLocation(170, 250);
-        changeFlight.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            }
+        changeFlight.addActionListener(e -> {
+            parent.getChangeMenu().setVisible(false);
+            parent.getChangeFlight().generateTable(parent.getFlights());
+            parent.getChangeFlight().setVisible(true);
         });
         add(changeFlight);
 
         cancel = new JButton("Cancel");
         cancel.setSize(350, 30);
         cancel.setLocation(170, 300);
-        cancel.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                parent.getCreateMenu().setVisible(false);
-                parent.getChangeMenu().setVisible(false);
-                parent.getMain().setVisible(true);
-            }
+        cancel.addActionListener(e -> {
+            parent.getChangeMenu().setVisible(false);
+            parent.getMain().setVisible(true);
         });
         add(cancel);
     }

@@ -21,6 +21,8 @@ public class Flights implements Serializable {
         this.business_place_price = business_place_price;
     }
 
+    public Flights() {
+    }
 
     public int getId() {
         return id;

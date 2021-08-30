@@ -1,9 +1,6 @@
 package BigProject;
 
-import BigProject.Classes.Airplanes;
-import BigProject.Classes.Cities;
-import BigProject.Classes.Flights;
-import BigProject.Classes.PackageData;
+import BigProject.Classes.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -60,6 +57,42 @@ public class DBManager {
         return cities;
     }
 
+    public ArrayList<Flights> getFlights(){
+        ArrayList<Flights> flights = new ArrayList<>();
+        try{
+            PreparedStatement st = connection.prepareStatement("SELECT * FROM flights");
+            ResultSet rs = st.executeQuery();
+            while(rs.next()){
+                int id = rs.getInt("id");
+                int ai = rs.getInt("aircraft_id");
+                int dci = rs.getInt("departure_city_id");
+                int aci = rs.getInt("arrival_city_id");
+                String dt = rs.getString("departure_time");
+                int epp = rs.getInt("economy_place_price");
+                int bpp = rs.getInt("business_place_price");
+                flights.add(new Flights(id,ai,dci,aci,dt,epp,bpp));
+            }
+        }catch (Exception e){e.printStackTrace();}
+        return flights;
+    }
+    public ArrayList<Tickets> getTickets(){
+        ArrayList<Tickets> tickets = new ArrayList<>();
+        try{
+            PreparedStatement st = connection.prepareStatement("SELECT * FROM tickets");
+            ResultSet rs = st.executeQuery();
+            while(rs.next()){
+                int id = rs.getInt("id");
+                int fi = rs.getInt("flight_id");
+                String name = rs.getString("name");
+                String surname = rs.getString("surname");
+                String pn = rs.getString("passport_number");
+                String tt = rs.getString("ticket_type");
+                tickets.add(new Tickets(id,fi,name,surname,pn,tt));
+            }
+        }catch (Exception e){e.printStackTrace();}
+        return tickets;
+    }
+
     public void addTheFlight(Flights flights){
         try{
             PreparedStatement st = connection.prepareStatement("INSERT INTO flights(id, aircraft_id, departure_city_id, arrival_city_id, departure_time, economy_place_price, business_place_price) VALUES(NULL,?,?,?,?,?,?)");
@@ -85,6 +118,19 @@ public class DBManager {
         }catch (Exception ex){ex.printStackTrace();}
     }
 
+    public void addTheTicket(Tickets t){
+        try{
+            PreparedStatement st = connection.prepareStatement("INSERT INTO tickets(id,flight_id,name,surname,passport_number,ticket_type) VALUES(NULL,?,?,?,?,?)");
+            st.setInt(1,t.getFlight_id());
+            st.setString(2,t.getName());
+            st.setString(3,t.getSurname());
+            st.setString(4,t.getPassport_number());
+            st.setString(5,t.getTicket_type());
+            st.executeUpdate();
+            st.close();
+        }catch (Exception e){e.printStackTrace();}
+    }
+
     public void addTheAirplane(Airplanes airplane){
         try{
             PreparedStatement st = connection.prepareStatement("INSERT INTO airplanes(id,name,model,business_class_capacity,economy_class_capacity) VALUES(NULL,?,?,?,?)");
@@ -95,5 +141,73 @@ public class DBManager {
             st.executeUpdate();
             st.close();
         }catch (Exception exception){exception.printStackTrace();}
+    }
+
+    public void updateTheAirplane(Airplanes airplanes){
+        try{
+            PreparedStatement st = connection.prepareStatement("UPDATE airplanes SET name = ?, model = ?, business_class_capacity = ?, economy_class_capacity = ? WHERE id = ?");
+            st.setString(1, airplanes.getName());
+            st.setString(2, airplanes.getModel());
+            st.setInt(3,airplanes.getBusiness_class_capacity());
+            st.setInt(4,airplanes.getEconomy_class_capacity());
+            st.setInt(5,airplanes.getId());
+            st.executeUpdate();
+            st.close();
+        }catch (Exception e){e.printStackTrace();}
+
+    }
+
+    public void updateTheCity(Cities city){
+        try{
+            PreparedStatement st = connection.prepareStatement("UPDATE cities SET name = ?, country = ?, short_name = ? WHERE id = ?");
+            st.setString(1,city.getName());
+            st.setString(2,city.getCountry());
+            st.setString(3,city.getShort_name());
+            st.setInt(4,city.getId());
+            st.executeUpdate();
+            st.close();
+        }catch (Exception e){e.printStackTrace();}
+    }
+
+    public void updateTheFlight(Flights f){
+        try{
+            PreparedStatement st = connection.prepareStatement("UPDATE flights SET aircraft_id = ?,departure_city_id = ?, arrival_city_id = ?, departure_time = ?, economy_place_price = ?, business_place_price = ? WHERE id = ?");
+            st.setInt(1,f.getAirplane_id());
+            st.setInt(2,f.getDeparture_city_id());
+            st.setInt(3,f.getArrival_city_id());
+            st.setString(4,f.getDeparture_time());
+            st.setInt(5,f.getEconomy_place_price());
+            st.setInt(6,f.getBusiness_place_price());
+            st.setInt(7,f.getId());
+            st.executeUpdate();
+            st.close();
+        }catch (Exception e){e.printStackTrace();}
+    }
+
+    public void deleteTheAirplane(Airplanes x){
+        try{
+            PreparedStatement st = connection.prepareStatement("DELETE FROM airplanes WHERE id = ?");
+            st.setInt(1,x.getId());
+            st.executeUpdate();
+            st.close();
+        }catch (Exception e){e.printStackTrace();}
+    }
+
+    public void deleteTheCity(Cities x){
+        try{
+            PreparedStatement st = connection.prepareStatement("DELETE FROM cities WHERE id = ?");
+            st.setInt(1,x.getId());
+            st.executeUpdate();
+            st.close();
+        }catch (Exception e){e.printStackTrace();}
+    }
+
+    public void deleteTheFlight(Flights x){
+        try{
+            PreparedStatement st = connection.prepareStatement("DELETE FROM flights WHERE id = ?");
+            st.setInt(1,x.getId());
+            st.executeUpdate();
+            st.close();
+        }catch (Exception e){e.printStackTrace();}
     }
 }

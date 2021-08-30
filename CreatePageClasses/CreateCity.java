@@ -1,6 +1,7 @@
-package BigProject;
+package BigProject.CreatePageClasses;
 
 import BigProject.Classes.Cities;
+import BigProject.GuiAdmin;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,7 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class CreateCity extends JPanel {
-    private final Gui parent;
+    private final GuiAdmin parent;
     private final JLabel jLabel;
     private final JLabel nameL;
     private final JLabel countryL;
@@ -19,7 +20,7 @@ public class CreateCity extends JPanel {
     private final JButton addB;
     private final JButton backB;
 
-    public CreateCity(Gui parent){
+    public CreateCity(GuiAdmin parent){
         this.parent = parent;
 
         setSize(700,600);

@@ -1,4 +1,6 @@
-package BigProject;
+package BigProject.CreatePageClasses;
+
+import BigProject.GuiAdmin;
 
 import javax.swing.*;
 import java.awt.*;
@@ -7,13 +9,13 @@ import java.awt.event.ActionListener;
 
 public class CreateMenu extends JPanel {
     private JLabel jLabel;
-    private final Gui parent;
+    private final GuiAdmin parent;
     private final JButton createAirplane;
     private final JButton createCity;
     private final JButton createFlight;
     private final JButton cancel;
 
-    public CreateMenu(Gui parent){
+    public CreateMenu(GuiAdmin parent){
         this.parent = parent;
         setSize(700, 600);
         setLayout(null);
@@ -56,7 +58,9 @@ public class CreateMenu extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 parent.getCreateMenu().setVisible(false);
+                parent.getCreateFlight().updateBoxes(parent.getCities(), parent.getAirplanes());
                 parent.getCreateFlight().setVisible(true);
+
             }
         });
         add(createFlight);
@@ -64,12 +68,9 @@ public class CreateMenu extends JPanel {
         cancel = new JButton("Cancel");
         cancel.setSize(350, 30);
         cancel.setLocation(170, 300);
-        cancel.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                parent.getCreateMenu().setVisible(false);
-                parent.getMain().setVisible(true);
-            }
+        cancel.addActionListener(e -> {
+            parent.getCreateMenu().setVisible(false);
+            parent.getMain().setVisible(true);
         });
         add(cancel);
     }

@@ -6,15 +6,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
-public class MainPageForAdmin extends JPanel {
-    private GuiAdmin parent;
+public class MainPageForCashier extends JPanel {
+    private GuiCashier parent;
     private JLabel jLabel;
-    private JButton createButton;
+    private final JButton createButton;
     private JButton changeButton;
     private JButton deleteButton;
     private JButton exitButton;
 
-    public MainPageForAdmin(GuiAdmin parent){
+    public MainPageForCashier(GuiCashier parent){
         this.parent = parent;
         setSize(700, 600);
         setLayout(null);
@@ -27,21 +27,20 @@ public class MainPageForAdmin extends JPanel {
 
         createButton = new JButton("Create");
         createButton.setSize(350, 30);createButton.setLocation(170,150);
-        createButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                parent.getMain().setVisible(false);
-                parent.getCreateMenu().setVisible(true);
-            }
+        createButton.addActionListener(e -> {
+            parent.getMainPageForCashier().setVisible(false);
+            parent.getCreateTicket().updateBoxes(parent.getFlights(), parent.getCities());
+            parent.getCreateTicket().setVisible(true);
         });
         add(createButton);
 
-        changeButton = new JButton("Change");
-        changeButton.setSize(350, 30);changeButton.setLocation(170, 200);
+        changeButton = new JButton("Edit");
+        changeButton.setSize(350, 30);
+        changeButton.setLocation(170, 200);
         changeButton.addActionListener(e -> {
-            parent.getMain().setVisible(false);
-            parent.getChangeMenu().setVisible(true);
-
+            parent.getChangeTicket().generateTable(parent.getTickets(), parent.getAirplanes());
+            parent.getMainPageForCashier().setVisible(false);
+            parent.getChangeTicket().setVisible(true);
         });
         add(changeButton);
 
@@ -49,8 +48,7 @@ public class MainPageForAdmin extends JPanel {
         deleteButton.setSize(350, 30);
         deleteButton.setLocation(170, 250);
         deleteButton.addActionListener(e -> {
-            parent.getMain().setVisible(false);
-            parent.getDeleteMenu().setVisible(true);
+
         });
         add(deleteButton);
 
